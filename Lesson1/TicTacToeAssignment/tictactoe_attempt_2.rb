@@ -13,7 +13,7 @@ board_model = { "1" => " ", "2" => " ", "3" => " ",
                 "4" => " ", "5" => " ", "6" => " ",
                 "7" => " ", "8" => " ", "9" => " " }
 
-is_game_over = false
+game_over = false
 
 def show_board_ui(board_model)
   puts "     |     |     
@@ -103,7 +103,7 @@ def free_squares(board_model)
   board_model.select{ |square_num, symbol| symbol == " " }
 end
 
-until is_game_over
+until game_over
   p1_move(board_model)
   show_board_ui(board_model)
   if winner?(board_model.values) || free_squares(board_model).empty?
@@ -112,7 +112,7 @@ until is_game_over
     else 
       declare("The game is a tie")
     end
-    is_game_over = true
+    game_over = true
     break
   else
     p2_move(free_squares(board_model), board_model)
@@ -133,7 +133,7 @@ end
 
 # Create the board_ui
 
-# Create the is_game_over var
+# Create the game_over var
 
 # Create player1_move to take care of all of the logic for allowing player1 to make a move
 # Ask Player1 to pick a square between 1 and 9
@@ -175,7 +175,7 @@ end
         # else return nil
 
 
-# Until is_game_over
+# Until game_over
     # Call player1_move method which asks player1 for input, stores it, then makes the move if valid
     # if square is empty (valid), then fill it with X
 
