@@ -13,7 +13,9 @@ board_model = { "1" => " ", "2" => " ", "3" => " ",
                 "4" => " ", "5" => " ", "6" => " ",
                 "7" => " ", "8" => " ", "9" => " " }
 
-def make_board_ui(board_model)
+is_game_over = false
+
+def show_board_ui(board_model)
   puts "     |     |     
   #{board_model["1"]}  |  #{board_model["2"]}  |  #{board_model["3"]}  
      |     |     
@@ -27,89 +29,96 @@ def make_board_ui(board_model)
      |     |     "
 end
 
-is_game_over = false
-
-def get_move(board_model)
-  puts "Please pick a number (1 to 9):"
-  player_move = gets.chomp
-end
-
-def is_valid_square?(board_model, square_num)
+def valid_square?(board_model, square_num)
   board_model[square_num] == " " ? true : false
 end
 
-def is_winner?(board_arr)
-    for pos in 0..2
-      if board_arr[pos] != " " && board_arr[pos] == board_arr[pos + 3] && board_arr[pos] == board_arr[pos + 6]
-        if board_arr[pos] == "X"
-          return "Player 1 won"
-        elsif board_arr[pos] == "O"
-          return "Player 2 won"
-        else
-          return nil
-        end
+def prompt(msg)
+  puts "=> #{msg}"
+end
+
+def declare(msg)
+  puts "******** #{msg} ********"
+end
+
+def p1_move(board_model)
+  prompt("Please pick a square (1 to 9)")
+  player1_move = gets.chomp
+  if valid_square?(board_model, player1_move)
+    board_model[player1_move] = "X"
+  else
+    prompt("Whoops, that square is already taken!")
+    p1_move(board_model)
+  end
+end
+
+def find_winner(board_arr, pos)
+  if board_arr[pos] == "X"
+    return "Player 1 won"
+  elsif board_arr[pos] == "O"
+    return "Player 2 won"
+  else
+    return nil
+  end
+end
+
+def traverse_board(board_arr, pos, pos2, pos3)
+  if board_arr[pos] != " " && board_arr[pos] == board_arr[pos2] && board_arr[pos] == board_arr[pos3]
+    return find_winner(board_arr, pos)
+  end
+end
+
+def winner?(board_arr)
+    [0, 1, 2].each do |pos|
+      if down = traverse_board(board_arr, pos, pos+3, pos+6)
+        return down
+      else
+        next
       end
     end
 
-      if board_arr[0] != " " && board_arr[0] == board_arr[4] && board_arr[0] == board_arr[8]
-        if board_arr[0] == "X"
-          return "Player 1 won"
-        elsif board_arr[0] == "O"
-          return "Player 2 won"
-        else
-          return nil
-        end
+    [0, 3, 6].each do |pos|
+      if across = traverse_board(board_arr, pos, pos+1, pos+2)
+        return across
       end
+    end
 
-      if board_arr[2] != " " && board_arr[2] == board_arr[4] && board_arr[2] == board_arr[6]
-        if board_arr[pos] == "X"
-          return "Player 1 won"
-        elsif board_arr[pos] == "O"
-          return "Player 2 won"
-        else
-          return nil
-        end
-      end
-    # For indices 0, 3, and 6 in the array, we have a winner if the following is true:
-      # if current, current + 1, current + 2 are all the same value
-        # if current is X
-          # return Player 1
-        # elsif current is O
-          # return Player2
-        # else return nil
+    if diag_right = traverse_board(board_arr, 0, 4, 8)
+      return diag_right
+    elsif diag_left = traverse_board(board_arr, 2, 4, 6)
+      return diag_left
+    end
+
+    return nil
+end
+
+def p2_move(free_squares, board_model)
+  options = []
+  free_squares.each{ |square, sym| options.push([square, sym]) }
+  rand_square = options[rand(options.size - 1)]
+  board_model[rand_square[0]] = "O"
+end
+
+def free_squares(board_model)
+  board_model.select{ |square_num, symbol| symbol == " " }
 end
 
 until is_game_over
-  move_valid = false
-  while !move_valid
-    player_move = get_move(board_model)
-    if is_valid_square?(board_model, player_move)
-      board_model[player_move] = "X"
-      move_valid = true
+  p1_move(board_model)
+  show_board_ui(board_model)
+  if winner?(board_model.values) || free_squares(board_model).empty?
+    if winner?(board_model.values)
+      declare(winner?(board_model.values))
+    else 
+      declare("The game is a tie")
     end
-  end
-  empty_squares = board_model.select{ |square_num, symbol| symbol == " " }
-  empty_count = empty_squares.size
-  board_model_arr = board_model.values
-  if is_winner?(board_model_arr)
-    puts is_winner?(board_model_arr)
-    is_game_over = true
-    break
-  elsif empty_count == 0
-    puts "Nobody won the game"
     is_game_over = true
     break
   else
-    p2_choices = []
-    empty_squares.each do |square_num, symbol|
-      p2_choices.push([square_num, symbol])
-    end
-    rand_empty_square = p2_choices[rand(p2_choices.size - 1)]
-    board_model[rand_empty_square[0]] = "O"
-    make_board_ui(board_model)
+    p2_move(free_squares(board_model), board_model)
   end
+  show_board_ui(board_model)
 end
-
 
 # Goals: 
   # refactor to get rid of move_valid flag 
