@@ -18,6 +18,7 @@ game_over = false
 # METHODS
 
 def show_board_ui(board_model)
+  system "clear"
   puts "     |     |     
   #{board_model["1"]}  |  #{board_model["2"]}  |  #{board_model["3"]}  
      |     |     
