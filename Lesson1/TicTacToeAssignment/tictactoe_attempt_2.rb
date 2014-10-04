@@ -7,8 +7,6 @@
 
 # Ruby implementation:
 
-require "pry"
-
 # VARS
 
 board_model = { "1" => " ", "2" => " ", "3" => " ",
