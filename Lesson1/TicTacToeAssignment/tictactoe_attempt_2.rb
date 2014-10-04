@@ -55,27 +55,27 @@ def square_empty?(board_model, square_num)
 end
 
 def winner_exists?(board_arr)
-    [0, 1, 2].each do |pos|
-      if down = traverse_board(board_arr, pos, pos+3, pos+6)
-        return down
-      else
-        next
-      end
+  [0, 1, 2].each do |pos|
+    if down = traverse_board(board_arr, pos, pos+3, pos+6)
+      return down
+    else
+      next
     end
+  end
 
-    [0, 3, 6].each do |pos|
-      if across = traverse_board(board_arr, pos, pos+1, pos+2)
-        return across
-      end
+  [0, 3, 6].each do |pos|
+    if across = traverse_board(board_arr, pos, pos+1, pos+2)
+      return across
     end
+  end
 
-    if diag_right = traverse_board(board_arr, 0, 4, 8)
-      return diag_right
-    elsif diag_left = traverse_board(board_arr, 2, 4, 6)
-      return diag_left
-    end
+  if diag_right = traverse_board(board_arr, 0, 4, 8)
+    return diag_right
+  elsif diag_left = traverse_board(board_arr, 2, 4, 6)
+    return diag_left
+  end
 
-    return nil
+  return nil
 end
 
 def traverse_board(board_arr, pos, pos2, pos3)
