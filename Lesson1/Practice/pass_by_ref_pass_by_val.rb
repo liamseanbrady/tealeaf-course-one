@@ -21,10 +21,7 @@ end
 # Confused by results, so creating a simpler example
 passing(array) do
   p array.uniq
-  binding.pry
 end
-
-binding.pry
 
 # The problem was that I thought push and pop didn't mutate the caller. Apparently, they do.
 
