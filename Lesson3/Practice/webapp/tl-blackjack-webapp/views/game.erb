@@ -1,9 +1,28 @@
 <h4>Hi <%=session[:player_name]%>!</h4>
 <br/>
-<h4>Your cards are:<h4>
+<h4>You bet <%=session[:bet_amount]%></h4>
 
+<h2>Your total</h2>
+<%= calculate_total(session[:player_cards]).to_s %>
+
+<h2>Your cards</h2>
 <ul>
   <% session[:player_cards].each do |card| %>
-    <li><%= card[0] + " of " + card[1] %></li>
+    <li><%= card.to_s %></li>
   <% end %>
 </ul>
+
+<form action='deal_card' method='post'>
+  <input type='submit' class='btn'>
+</form>
+
+<h2>Cards Left in Deck</h2>
+<ul>
+  <% session[:deck].each do |card| %>
+    <li><%= card.to_s %></li>
+  <% end %>
+</ul>
+
+<form action='reset_game' method='post'>
+  <input type='submit' class='btn'>
+</form>
