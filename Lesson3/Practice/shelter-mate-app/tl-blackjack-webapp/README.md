@@ -1,0 +1,1 @@
+An app for practising HTTP using Ruby and Sinatra.

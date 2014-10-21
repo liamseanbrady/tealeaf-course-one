@@ -1,0 +1,17 @@
+textarea {
+  width: 100%;
+  max-width: 210px;
+}
+
+.btn {
+  margin-bottom: 20px;
+}
+
+input {
+  width: 400px;
+}
+
+.dog_info p {
+  line-height: 1.5em;
+  font-size: 1.4em;
+}
